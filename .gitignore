@@ -1,0 +1,26 @@
+# Environment files — never commit API keys
+backend/.env.local
+frontend/.env.local
+.env.local
+.env
+
+# Python
+backend/.venv/
+backend/__pycache__/
+backend/**/__pycache__/
+*.pyc
+*.pyo
+uv.lock
+
+# Node / Next.js
+frontend/node_modules/
+frontend/.next/
+frontend/out/
+frontend/build/
+
+# OS
+.DS_Store
+Thumbs.db
+
+Voiceplan.md
+AGENTS.md
