@@ -3,7 +3,7 @@ from dotenv import load_dotenv
 
 from livekit import agents, rtc
 from livekit.agents import AgentServer, AgentSession, Agent, room_io
-from livekit.plugins import openai, noise_cancellation
+from livekit.plugins import openai, noise_cancellation, cartesia
 
 # Load .env.local from the backend root, regardless of cwd
 load_dotenv(Path(__file__).parent.parent / ".env.local")
@@ -217,10 +217,17 @@ async def voice_assistant(ctx: agents.JobContext):
     session = AgentSession(
         llm=openai.realtime.RealtimeModel(
             model="gpt-4o-realtime-preview",
-            voice="marin",
+            modalities=["text"],  # Disable OpenAI TTS; Cartesia handles audio
             temperature=0.8,
-            speed=0.82, 
-        )
+        ),
+        tts=cartesia.TTS(
+            model="sonic-3",
+            voice="e7f62a3d-3ff6-4cb6-a1b1-08cc5bae3357",
+            speed=0.9,
+            volume=1.8,
+            emotion="Happy",
+            language="en",
+        ),
     )
 
     await session.start(
@@ -236,7 +243,7 @@ async def voice_assistant(ctx: agents.JobContext):
     await session.generate_reply(
         instructions=(
             "Start the conversation by saying exactly: "
-            "'Hi! This is Megan from Go Green Solar. "
+            "'Hi This is Megan from Go Green Solar. "
             "I'm checking if you qualify for a solar incentive in your area "
             "that could cut your electricity bill almost completely. "
             "Just five quick questions — takes under a minute. "
